@@ -13,20 +13,6 @@
   "license": "MIT",
   "preferences": [
     {
-      "name": "SIGNER_PRIVATE_KEY",
-      "description": "A signer private key used authorize sending casts",
-      "type": "password",
-      "required": true,
-      "title": "Signer Private Key"
-    },
-    {
-      "name": "SIGNER_FID",
-      "description": "The FID for your account",
-      "type": "textfield",
-      "required": true,
-      "title": "FID"
-    },
-    {
       "name": "PINATA_JWT",
       "description": "Your Pinata API key JWT which can be created at https://app.pinata.cloud/developers",
       "type": "password",
