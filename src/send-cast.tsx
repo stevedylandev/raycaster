@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { LocalStorage,Form, ActionPanel, Action, showToast, getPreferenceValues, Toast } from "@raycast/api";
+import {
+  LocalStorage,
+  Form,
+  ActionPanel,
+  Action,
+  showToast,
+  getPreferenceValues,
+  Toast,
+  openExtensionPreferences,
+  Detail,
+} from "@raycast/api";
 import { Message, NobleEd25519Signer, CastAddBody, makeCastAdd } from "@farcaster/core";
 import { Values, ChannelResult, CastAddData, FileUploadResult } from "./types";
 import { hexToBytes } from "@noble/hashes/utils";
@@ -18,7 +28,14 @@ const JWT = preferences.PINATA_JWT;
 const GATEWAY = preferences.GATEWAY;
 
 export default function Command() {
-  const [lengthError, setLengthError] = useState<string | undefined>();;
+  const [lengthError, setLengthError] = useState<string | undefined>();
+  const [imageUploadError, setImageUploadError] = useState<boolean>(false);
+  const markdown = `
+
+# Pinata API key either missing or incorrect. 
+
+Press Enter then update the key on the right side of the prefernce pane
+`;
 
   function dropLengthErrorIfNeeded() {
     if (lengthError && lengthError.length > 0) {
@@ -32,7 +49,7 @@ export default function Command() {
         style: Toast.Style.Failure,
         title: "Files require a Pinata API Key",
       });
-      throw new Error("Check Pinata API Key");
+      setImageUploadError(true);
     }
 
     await showToast({ style: Toast.Style.Animated, title: "Uploading File..." });
@@ -61,15 +78,16 @@ export default function Command() {
         method: "HEAD",
       });
 
-      const fileExtensions: any = {
+      const fileExtensions: { [key: string]: string } = {
         "image/jpeg": "jpeg",
         "image/png": "png",
         "image/webp": "webp",
         "image/gif": "gif",
       };
-      const selectedFileType: any = headersReq.headers.get("content-type");
+
+      const selectedFileType = headersReq.headers.get("content-type");
       const defaultExtension = "png";
-      const fileExtension = fileExtensions[selectedFileType] || defaultExtension;
+      const fileExtension = selectedFileType ? fileExtensions[selectedFileType] || defaultExtension : defaultExtension;
 
       const link = `https://${GATEWAY}/ipfs/${uploadRes.IpfsHash}?filename=image.${fileExtension}`;
 
@@ -87,11 +105,11 @@ export default function Command() {
     file?: string | undefined,
   ) {
     await showToast({ style: Toast.Style.Animated, title: "Sending Cast..." });
-    const FID = await LocalStorage.getItem("fid")
-    const SIGNER = await LocalStorage.getItem("signerKey") as string
+    const FID = await LocalStorage.getItem("fid");
+    const SIGNER = (await LocalStorage.getItem("signerKey")) as string;
 
-    if(!FID || !SIGNER){
-      throw new Error("Sign in first")
+    if (!FID || !SIGNER) {
+      throw new Error("Sign in first");
     }
     try {
       const dataOptions = {
@@ -122,7 +140,7 @@ export default function Command() {
       }
 
       const castAddReq = await makeCastAdd(castBody, dataOptions, ed25519Signer);
-      const castAdd: any = castAddReq._unsafeUnwrap();
+      const castAdd = castAddReq._unsafeUnwrap();
       const messageBytes = Buffer.from(Message.encode(castAdd).finish());
 
       const castRequest = await fetch("https://hub.pinata.cloud/v1/submitMessage", {
@@ -178,11 +196,25 @@ export default function Command() {
     }
   }
 
+  if (imageUploadError) {
+    return (
+      <Detail
+        markdown={markdown}
+        actions={
+          <ActionPanel>
+            <Action title="Open Extension Preferences" onAction={openExtensionPreferences} />
+          </ActionPanel>
+        }
+      />
+    );
+  }
+
   return (
     <Form
       actions={
         <ActionPanel>
-          <Action.SubmitForm onSubmit={handleSubmit} />
+          <Action.SubmitForm title="Send Cast" onSubmit={handleSubmit} />
+          <Action title="Setup Pinata for Images" onAction={openExtensionPreferences} />
         </ActionPanel>
       }
     >
@@ -193,8 +225,9 @@ export default function Command() {
         placeholder="Type you main cast here"
         error={lengthError}
         onChange={dropLengthErrorIfNeeded}
-        onBlur={(event: any) => {
-          if (event.target.value?.length > 320) {
+        onBlur={(event) => {
+          const value = event.target.value;
+          if (value && value.length > 320) {
             setLengthError("Exceeds 320 character maximum");
           } else {
             dropLengthErrorIfNeeded();
@@ -209,7 +242,7 @@ export default function Command() {
         title="Image"
         canChooseDirectories={false}
         allowMultipleSelection={false}
-        info="Requires Pinata API key"
+        info="Requires Pinata API key, run Cmd + Shift + Enter"
         storeValue={false}
       />
     </Form>

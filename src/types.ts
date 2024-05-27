@@ -28,14 +28,6 @@ export type CastAddData = {
     fid: number;
     timestamp: number;
     network: "FARCASTER_NETWORK_MAINNET";
-    castAddBody: {
-      embedsDeprecated: any[];
-      mentions: any[];
-      parentUrl: string;
-      text: string;
-      mentionsPositions: any[];
-      embeds: any[];
-    };
     hash: string;
     hashScheme: "HASH_SCHEME_BLAKE3";
     signature: string;
@@ -49,16 +41,16 @@ export type FileUploadResult = {
   PinSize: number;
   Timestamp: string;
   isDuplicate?: boolean;
-}
+};
 
 export type KeyRequestData = {
   deepLinkUrl: string;
   pollingToken: string;
   privateKey: string;
   publicKey: string;
-}
+};
 
 export type PollRequestData = {
   state: string;
   userFid?: string;
-}
+};

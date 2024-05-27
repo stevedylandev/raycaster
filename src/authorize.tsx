@@ -77,9 +77,7 @@ export default function Command() {
           title="Scan the QR code to authorize Raycaster"
         />
       )}
-      {!complete && signInError && (
-          <List.EmptyView icon={Icon.XMarkCircle} title="Timed out trying to sign in" />
-        )}
+      {!complete && signInError && <List.EmptyView icon={Icon.XMarkCircle} title="Timed out trying to sign in" />}
     </List>
   );
 }
