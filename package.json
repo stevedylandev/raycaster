@@ -21,7 +21,7 @@
     },
     {
       "name": "GATEWAY",
-      "description": "Paste in your Dedicated Gateway or public gateway in the following format: https://gateway.pinata.cloud",
+      "description": "Paste in your Dedicated Gateway or public gateway in the following format: gateway.pinata.cloud",
       "type": "textfield",
       "required": false,
       "title": "IPFS Gateway",
