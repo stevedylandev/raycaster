@@ -37,7 +37,7 @@
     },
     {
       "name": "authorize",
-      "title": "Sign in with Warpcast",
+      "title": "Authorize Raycaster",
       "description": "In order to send a cast with Raycaster you first need to authorize it with this command",
       "mode": "view"
     }

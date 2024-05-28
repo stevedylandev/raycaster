@@ -9,6 +9,8 @@ import {
   Toast,
   openExtensionPreferences,
   Detail,
+  showHUD,
+  PopToRootType,
 } from "@raycast/api";
 import { Message, NobleEd25519Signer, CastAddBody, makeCastAdd } from "@farcaster/core";
 import { Values, ChannelResult, CastAddData, FileUploadResult } from "./types";
@@ -150,7 +152,6 @@ Press Enter then update the key on the right side of the prefernce pane
       });
 
       const castResult = await castRequest.json();
-      console.log(castResult);
       return castResult;
     } catch (error) {
       console.log("problem sending cast:", error);
@@ -171,7 +172,6 @@ Press Enter then update the key on the right side of the prefernce pane
 
         const channelRes = (await channelReq.json()) as ChannelResult;
         channelUrl = channelRes.result.channel.url;
-        console.log(channelRes);
       } else {
         channelUrl = undefined;
       }
@@ -187,9 +187,7 @@ Press Enter then update the key on the right side of the prefernce pane
       if (!castRes) {
         throw new Error("Trouble sending cast");
       }
-
-      const castData = castRes as CastAddData;
-      showToast({ title: "Cast Sent!", message: castData.data.hash as string });
+      await showHUD("Cast Sent!", { clearRootSearch: true, popToRootType: PopToRootType.Immediate });
     } catch (error) {
       console.log(error);
       showToast({ title: "Problem sending cast", message: error as string, style: Toast.Style.Failure });
@@ -214,7 +212,7 @@ Press Enter then update the key on the right side of the prefernce pane
       actions={
         <ActionPanel>
           <Action.SubmitForm title="Send Cast" onSubmit={handleSubmit} />
-          <Action title="Setup Pinata for Images" onAction={openExtensionPreferences} />
+          <Action shortcut={{ modifiers: ["cmd", "shift"], key: "p" }} title="Setup Pinata for Images" onAction={openExtensionPreferences} />
         </ActionPanel>
       }
     >
