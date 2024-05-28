@@ -13,7 +13,7 @@ import {
   PopToRootType,
 } from "@raycast/api";
 import { Message, NobleEd25519Signer, CastAddBody, makeCastAdd } from "@farcaster/core";
-import { Values, ChannelResult, CastAddData, FileUploadResult } from "./types";
+import { Values, ChannelResult, FileUploadResult } from "./types";
 import { hexToBytes } from "@noble/hashes/utils";
 import fetch from "node-fetch";
 import fs from "fs";
@@ -212,7 +212,11 @@ Press Enter then update the key on the right side of the prefernce pane
       actions={
         <ActionPanel>
           <Action.SubmitForm title="Send Cast" onSubmit={handleSubmit} />
-          <Action shortcut={{ modifiers: ["cmd", "shift"], key: "p" }} title="Setup Pinata for Images" onAction={openExtensionPreferences} />
+          <Action
+            shortcut={{ modifiers: ["cmd", "shift"], key: "p" }}
+            title="Setup Pinata for Images"
+            onAction={openExtensionPreferences}
+          />
         </ActionPanel>
       }
     >

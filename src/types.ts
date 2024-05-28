@@ -22,20 +22,6 @@ export type ChannelResult = {
   };
 };
 
-export type CastAddData = {
-  data: {
-    type: "MESSAGE_TYPE_CAST_ADD";
-    fid: number;
-    timestamp: number;
-    network: "FARCASTER_NETWORK_MAINNET";
-    hash: string;
-    hashScheme: "HASH_SCHEME_BLAKE3";
-    signature: string;
-    signatureScheme: "SIGNATURE_SCHEME_ED25519";
-    signer: string;
-  };
-};
-
 export type FileUploadResult = {
   IpfsHash: string;
   PinSize: number;

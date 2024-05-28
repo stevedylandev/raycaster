@@ -8,7 +8,7 @@ Requires a Farcaster account on [Warpcast's](https://warpcast.com) mobile app to
 
 After installing the Raycaster extension you will need to authorize it with the `Authorize Raycaster` command. This will bring up a QR code you can scan with your phone to approve in the Warpcast app. Once approved Raycaster will store the approved signer key and your account FID to local storage.
 
-Once you are authorized you can start sending casts with the `Send Cast` command! You will find a place to put text for a cast, a place to paste a link, and a field for a channel if you want to cast in one. The channel field works by simply typing the name of the channel seen with the forward slash. For example, `/diet-coke` would just be `diet-coke`. 
+Once you are authorized you can start sending casts with the `Send Cast` command! You will find a place to put text for a cast, a place to paste a link, and a field for a channel if you want to cast in one. The channel field works by simply typing the name of the channel seen with the forward slash. For example, `/diet-coke` would just be `diet-coke`.
 
 ## Images
 
